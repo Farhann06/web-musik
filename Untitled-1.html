@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoundSpace - Premium Booking Studio</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- DESIGN VARIABLES --- */
+        :root {
+            --bg-base: #060608;
+            --bg-surface: rgba(20, 20, 28, 0.6);
+            --bg-input: #121218;
+            --border-color: rgba(255, 255, 255, 0.06);
+            --primary: #6366f1;
+            --primary-glow: rgba(99, 102, 241, 0.3);
+            --accent: #d946ef;
+            --accent-glow: rgba(217, 70, 239, 0.2);
+            --success: #10b981;
+            --text-main: #f8fafc;
+            --text-muted: #64748b;
+        }
+
+        /* --- RESET & BASIC --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(217, 70, 239, 0.05) 0%, transparent 40%);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding-bottom: 60px;
+        }
+
+        /* --- HERO HEADER --- */
+        .hero {
+            max-width: 1200px;
+            margin: 40px auto 20px auto;
+            padding: 0 24px;
+            text-align: left;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            background: linear-gradient(to right, #fff, #a5b4fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin-top: 4px;
+        }
+
+        /* --- STATS BAR --- */
+        .stats-bar {
+            display: flex;
+            gap: 24px;
+            margin-top: 16px;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 6px 14px;
+            border-radius: 100px;
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--success);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--success);
+        }
+
+        /* --- MAIN CONTAINER --- */
+        .wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 32px;
+        }
+
+        @media (max-width: 992px) {
+            .wrapper { grid-template-columns: 1fr; }
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #fff;
+            letter-spacing: -0.01em;
+        }
+
+        /* --- GLASSMORPHISM CARDS (LEFT) --- */
+        .studio-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .studio-card {
+            background: var(--bg-surface);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .studio-card:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .studio-card.active {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.06);
+            box-shadow: 0 0 25px var(--primary-glow);
+        }
+
+        .studio-meta h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .tag-group {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 6px;
+            color: #94a3b8;
+            border: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        .tag.premium {
+            background: rgba(217, 70, 239, 0.1);
+            color: #f472b6;
+            border-color: rgba(217, 70, 239, 0.2);
+        }
+
+        .studio-amenities {
+            font-size: 0.88rem;
+            color: #94a3b8;
+        }
+
+        .studio-pricing {
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 14px;
+        }
+
+        .price-text {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .price-text span {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .btn-action {
+            background: #fff;
+            color: #000;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-action:hover {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        .studio-card.active .btn-action {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        /* --- SIDEBAR FORM (RIGHT) --- */
+        .sidebar-panel {
+            background: var(--bg-surface);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 32px;
+            height: fit-content;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .input-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .field-box {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .field-box label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .field-box input, .field-box select {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--bg-input);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+
+        .field-box input:focus, .field-box select:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255,255,255,0.02);
+        }
+
+        .field-box input[readonly] {
+            border-style: dashed;
+            color: var(--accent);
+            font-weight: 600;
+            cursor: not-allowed;
+        }
+
+        /* Custom AddOn Layout */
+        .addon-card {
+            background: var(--bg-input);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        .addon-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .addon-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .addon-desc {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .addon-card input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        /* --- PRICE BREAKDOWN --- */
+        .summary-divider {
+            margin: 10px 0;
+            border-top: 1px dashed rgba(255, 255, 255, 0.1);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .summary-row .label {
+            font-size: 0.95rem;
+            color: #94a3b8;
+        }
+
+        .summary-row .value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--success);
+            transition: transform 0.15s ease;
+        }
+
+        /* --- SUBMIT BUTTON --- */
+        .btn-submit-booking {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, #4f46e5 100%);
+            color: #fff;
+            border: none;
+            padding: 16px;
+            border-radius: 14px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px var(--primary-glow);
+        }
+
+        .btn-submit-booking:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 25px var(--primary-glow);
+            filter: brightness(1.1);
+        }
+
+        /* --- POPUP TOAST NOTIFIKASI --- */
+        .toast-notif {
+            display: none;
+            background: linear-gradient(135deg, #064e3b 0%, #022c22 100%);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #a7f3d0;
+            padding: 20px;
+            border-radius: 16px;
+            margin-top: 20px;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .toast-notif h4 {
+            font-size: 1rem;
+            margin-bottom: 4px;
+            color: #fff;
+        }
+
+        .toast-notif p {
+            font-size: 0.85rem;
+            color: #a7f3d0;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HERO SECTION -->
+    <div class="hero">
+        <h1>SOUNDSPACE</h1>
+        <p>Sistem Reservasi Latihan & Recording Musik Studio Hub</p>
+        <div class="stats-bar">
+            <div class="stat-item"><div class="stat-dot"></div> Sistem Online</div>
+            <div class="stat-item">⚡ 2 Studio Aktif</div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="wrapper">
+        
+        <!-- KIRI: PILIHAN STUDIO -->
+        <section>
+            <div class="section-title">Pilih Ruang Studio</div>
+            <div class="studio-grid">
+                
+                <!-- Studio A -->
+                <div class="studio-card" id="studio-a">
+                    <div class="studio-meta">
+                        <h3>Studio Aliran (Room A)</h3>
+                        <div class="tag-group">
+                            <span class="tag premium">✨ Premium Room</span>
+                            <span class="tag">🎸 Max 8 Orang</span>
+                            <span class="tag">🔊 Isolated 100%</span>
+                        </div>
+                        <div class="studio-amenities">Mapex Pro Drum Set, Marshall JCM900, Fender Precision Bass</div>
+                    </div>
+                    <div class="studio-pricing">
+                        <div class="price-text">Rp 150.000<span>/jam</span></div>
+                        <button type="button" class="btn-action" onclick="pilihStudio('studio-a', 'Studio Aliran (Room A)', 150000)">Pilih</button>
+                    </div>
+                </div>
+
+                <!-- Studio B -->
+                <div class="studio-card" id="studio-b">
+                    <div class="studio-meta">
+                        <h3>Studio Harmoni (Room B)</h3>
+                        <div class="tag-group">
+                            <span class="tag">⚡ Standard Room</span>
+                            <span class="tag">🎸 Max 5 Orang</span>
+                            <span class="tag">🎹 Acoustic Layer</span>
+                        </div>
+                        <div class="studio-amenities">Yamaha Stage Custom, Roland Keyboard, Laney Linebacker</div>
+                    </div>
+                    <div class="studio-pricing">
+                        <div class="price-text">Rp 100.000<span>/jam</span></div>
+                        <button type="button" class="btn-action" onclick="pilihStudio('studio-b', 'Studio Harmoni (Room B)', 100000)">Pilih</button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- KANAN: FORM RESERVASI -->
+        <aside>
+            <div class="section-title">Konfigurasi Jadwal</div>
+            <div class="sidebar-panel">
+                <form id="formBookingStudio">
+                    <div class="input-stack">
+                        
+                        <div class="field-box">
+                            <label>Studio Pilihan</label>
+                            <input type="text" id="targetStudio" value="Pilih studio terlebih dahulu..." readonly>
+                        </div>
+
+                        <!-- INPUT BARU: EMAIL -->
+                        <div class="field-box">
+                            <label>Alamat Email</label>
+                            <input type="email" id="emailUser" placeholder="nama@email.com" required>
+                        </div>
+
+                        <!-- INPUT BARU: WHATSAPP -->
+                        <div class="field-box">
+                            <label>Nomor WhatsApp</label>
+                            <input type="tel" id="waUser" placeholder="Contoh: 081234567xxx" required>
+                        </div>
+
+                        <div class="field-box">
+                            <label>Pilih Tanggal</label>
+                            <input type="date" id="tanggalBooking" required>
+                        </div>
+
+                        <div class="field-box">
+                            <label>Jam Mulai Sesi</label>
+                            <input type="time" id="jamBooking" required>
+                        </div>
+
+                        <div class="field-box">
+                            <label>Durasi Penggunaan</label>
+                            <select id="durasiSesi">
+                                <option value="1">1 Jam Sesi</option>
+                                <option value="2">2 Jam Sesi</option>
+                                <option value="3">3 Jam Maksimal</option>
+                            </select>
+                        </div>
+
+                        <div class="field-box">
+                            <label>Layanan Tambahan</label>
+                            <label class="addon-card" for="checkboxKamera">
+                                <div class="addon-info">
+                                    <span class="addon-title">Paket Dokumentasi</span>
+                                    <span class="addon-desc">Sewa DSLR + File Mentahan (+Rp 50.000)</span>
+                                </div>
+                                <input type="checkbox" id="checkboxKamera">
+                            </label>
+                        </div>
+
+                        <div class="field-box">
+                            <label>Kupon Diskon</label>
+                            <input type="text" id="kuponDiskon" placeholder="Contoh: ROCK2026">
+                        </div>
+
+                        <div class="summary-divider"></div>
+
+                        <div class="summary-row">
+                            <span class="label">Total Pembayaran</span>
+                            <span class="value" id="textTotalHarga">Rp 0</span>
+                        </div>
+
+                        <button type="submit" class="btn-submit-booking">Amankan Jadwal Latihan</button>
+                    </div>
+                </form>
+
+                <!-- Toast Box Sukses Modifikasi -->
+                <div id="toastSukses" class="toast-notif">
+                    <h4>🎉 Sesi Booking Berhasil Diajukan!</h4>
+                    <p id="msgSukses">Data transaksi Anda aman diproses di sistem lokal.</p>
+                </div>
+            </div>
+        </aside>
+
+    </div>
+
+    <!-- RUNTIME LOGIC JAVASCRIPT -->
+    <script>
+        let baseHargaPerJam = 0;
+
+        function pilihStudio(elementId, namaStudio, harga) {
+            document.querySelectorAll('.studio-card').forEach(card => {
+                card.classList.remove('active');
+            });
+
+            document.getElementById(elementId).classList.add('active');
+            document.getElementById('targetStudio').value = namaStudio;
+            baseHargaPerJam = harga;
+            reKalkulasiBiaya();
+        }
+
+        function reKalkulasiBiaya() {
+            if (baseHargaPerJam === 0) return;
+
+            let durasi = parseInt(document.getElementById('durasiSesi').value) || 1;
+            let subtotal = baseHargaPerJam * durasi;
+
+            if (document.getElementById('checkboxKamera').checked) {
+                subtotal += 50000;
+            }
+
+            let kode = document.getElementById('kuponDiskon').value.trim().toUpperCase();
+            if (kode === "ROCK2026") {
+                subtotal = subtotal * 0.9;
+            }
+
+            const formatDisplay = document.getElementById('textTotalHarga');
+            formatDisplay.innerText = "Rp " + subtotal.toLocaleString('id-ID');
+            
+            formatDisplay.style.transform = "scale(1.1)";
+            setTimeout(() => { formatDisplay.style.transform = "scale(1)"; }, 100);
+        }
+
+        document.getElementById('durasiSesi').addEventListener('change', reKalkulasiBiaya);
+        document.getElementById('checkboxKamera').addEventListener('change', reKalkulasiBiaya);
+        document.getElementById('kuponDiskon').addEventListener('input', reKalkulasiBiaya);
+
+        // Handler Submit Form (Menampilkan visual log data kontak)
+        document.getElementById('formBookingStudio').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (baseHargaPerJam === 0) {
+                alert("Anda belum memilih ruang studio latihan!");
+                return;
+            }
+
+            // Ambil data kontak yang diisi user
+            let email = document.getElementById('emailUser').value;
+            let whatsapp = document.getElementById('waUser').value;
+
+            // Generate Kode Booking unik tiruan untuk simulasi respons sistem
+            let fakeBookingCode = "SND-" + Math.floor(1000 + Math.random() * 9000);
+
+            let toast = document.getElementById('toastSukses');
+            let msg = document.getElementById('msgSukses');
+            
+            // Perbarui teks di pop-up sukses untuk menyimulasikan integrasi kontak
+            msg.innerHTML = `Kode Booking <strong>${fakeBookingCode}</strong> telah di-generate secara otomatis.<br><br>
+                             Sistem mensimulasikan pengiriman rincian kwitansi ke:<br> 
+                             📩 <strong>${email}</strong> dan notifikasi check-in ke WhatsApp 📱 <strong>${whatsapp}</strong>.`;
+            
+            toast.style.display = "block";
+            toast.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+    </script>
+</body>
+</html>
