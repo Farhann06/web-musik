@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoundSpace - Sistem Booking Studio Musik</title>
+    <style>
+        /* Base Reset & Theme (Dark Rock/Metal Vibe) */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0f0f12;
+            color: #e2e8f0;
+            padding-bottom: 60px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e1b4b, #311042);
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 3px solid #6366f1;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: #fff;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(99, 102, 241, 0.6);
+        }
+
+        header p {
+            color: #94a3b8;
+            margin-top: 8px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .container { grid-template-columns: 1fr; }
+        }
+
+        /* Studio List Card Section */
+        .main-content h2, .sidebar h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #818cf8;
+            border-left: 4px solid #a855f7;
+            padding-left: 10px;
+        }
+
+        .studio-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .studio-card {
+            background-color: #1e1e24;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .studio-card:hover {
+            transform: translateY(-2px);
+            border-color: #6366f1;
+        }
+
+        .studio-info h3 {
+            color: #fff;
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+
+        .studio-info p {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            margin: 3px 0;
+        }
+
+        .badge-addon {
+            background-color: #312e81;
+            color: #c7d2fe;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            display: inline-block;
+            margin-top: 5px;
+        }
+
+        .price-tag {
+            text-align: right;
+        }
+
+        .price-tag .price {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #34d399;
+            display: block;
+        }
+
+        .btn-select {
+            background-color: #6366f1;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .btn-select:hover { background-color: #4f46e5; }
+
+        /* Sidebar / Booking Form */
+        .sidebar {
+            background-color: #1e1e24;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 25px;
+            height: fit-content;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: #cbd5e1;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            background-color: #0f0f12;
+            border: 1px solid #475569;
+            border-radius: 6px;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #a855f7;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 5px;
+        }
+        .checkbox-group input { width: auto; }
+
+        .btn-submit {
+            width: 100%;
+            background: linear-gradient(90deg, #6366f1, #a855f7);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
+        }
+
+        .btn-submit:hover {
+            filter: brightness(1.1);
+        }
+
+        /* Modal Simulation */
+        .success-box {
+            display: none;
+            background-color: #064e3b;
+            border: 1px solid #059669;
+            color: #a7f3d0;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>SOUNDSPACE STUDIO</h1>
+        <p>Sistem Booking Jadwal Latihan & Rekaman Musik Secara Real-Time</p>
+    </header>
+
+    <div class="container">
+        
+        <!-- Sisi Kiri: Pilihan Studio (Sesuai Entitas di ERD Anda) -->
+        <div class="main-content">
+            <h2>Pilihan Ruang Studio</h2>
+            <div class="studio-grid">
+                
+                <!-- Studio 1 -->
+                <div class="studio-card">
+                    <div class="studio-info">
+                        <h3>Studio Aliran (Room A)</h3>
+                        <p>🎸 Kapasitas: Maks 8 Orang</p>
+                        <p>🎛️ Alat: Marshall Amp, Tama Drum Kit, Fender Bass/Guitar</p>
+                        <span class="badge-addon">Premium Pack Available</span>
+                    </div>
+                    <div class="price-tag">
+                        <span class="price">Rp 150.000 / Jam</span>
+                        <button class="btn-select" onclick="pilihStudio('Studio Aliran (Room A)', 150000)">Pilih Studio</button>
+                    </div>
+                </div>
+
+                <!-- Studio 2 -->
+                <div class="studio-card">
+                    <div class="studio-info">
+                        <h3>Studio Harmoni (Room B)</h3>
+                        <p>🎸 Kapasitas: Maks 5 Orang</p>
+                        <p>🎛️ Alat: Yamaha Drum, Roland Keyboard, Laney Amp</p>
+                        <span class="badge-addon">Standard Pack</span>
+                    </div>
+                    <div class="price-tag">
+                        <span class="price">Rp 100.000 / Jam</span>
+                        <button class="btn-select" onclick="pilihStudio('Studio Harmoni (Room B)', 100000)">Pilih Studio</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Sisi Kanan: Form Alur Transaksi (Sesuai Alur Flowchart Anda) -->
+        <div class="sidebar">
+            <h2>Formulir Booking</h2>
+            <form id="bookingForm" onsubmit="prosesBooking(event)">
+                
+                <div class="form-group">
+                    <label for="txtStudio">Studio Terpilih</label>
+                    <input type="text" id="txtStudio" value="Pilih studio di sebelah kiri" readonly style="color: #a855f7; font-weight: bold;">
+                </div>
+
+                <div class="form-group">
+                    <label for="tanggal">Tanggal Latihan</label>
+                    <input type="date" id="tanggal" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="jam">Jam Mulai</label>
+                    <input type="time" id="jam" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="durasi">Durasi (Jam)</label>
+                    <select id="durasi" onchange="hitungTotal()">
+                        <option value="1">1 Jam</option>
+                        <option value="2">2 Jam</option>
+                        <option value="3">3 Jam</option>
+                        <option value="4">4 Jam</option>
+                    </select>
+                </div>
+
+                <!-- Entitas AddOn & Voucher dari Gambar ERD -->
+                <div class="form-group">
+                    <label>Add-On (Fasilitas Tambahan)</label>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="addonDokumentasi" onchange="hitungTotal()">
+                        <label for="addonDokumentasi">Sewa Kamera & Dokumentasi (+Rp 50.000)</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="voucher">Kode Voucher Diskon (Opsional)</label>
+                    <input type="text" id="voucher" placeholder="Contoh: ROCK2026" oninput="hitungTotal()">
+                </div>
+
+                <div class="form-group" style="margin-top: 25px; border-top: 1px dashed #475569; padding-top: 15px;">
+                    <label style="font-size: 1.1rem; color: #fff;">Total Estimasi Harga:</label>
+                    <div id="totalHarga" style="font-size: 1.8rem; font-weight: bold; color: #34d399;">Rp 0</div>
+                </div>
+
+                <button type="submit" class="btn-submit">Proses Pembayaran (QRIS/Transfer)</button>
+            </form>
+
+            <!-- Box Simulasi Respon dari Sequence Diagram (Payment GW & Admin Confirm) -->
+            <div id="successBox" class="success-box">
+                <strong>Booking Berhasil Diajukan!</strong><br>
+                Status Pembayaran Berhasil (Simulasi). Kode Booking unik Anda telah di-generate. Silakan cek email/WhatsApp.
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Data State Global Sementara
+        let hargaPerJam = 0;
+
+        function pilihStudio(namaStudio, harga) {
+            document.getElementById('txtStudio').value = namaStudio;
+            hargaPerJam = harga;
+            hitungTotal();
+        }
+
+        function hitungTotal() {
+            if (hargaPerJam === 0) return;
+
+            let durasi = parseInt(document.getElementById('durasi').value);
+            let total = hargaPerJam * durasi;
+
+            // Logika Tambahan Addon (Sesuai Relasi ERD Pembayaran - AddOn)
+            if (document.getElementById('addonDokumentasi').checked) {
+                total += 50000;
+            }
+
+            // Logika Voucher Diskon (Sesuai Relasi ERD Booking - Voucher)
+            let kodeVoucher = document.getElementById('voucher').value.toUpperCase();
+            if (kodeVoucher === "ROCK2026") {
+                total = total * 0.9; // Diskon 10%
+            }
+
+            // Tampilkan hasil format rupiah
+            document.getElementById('totalHarga').innerText = "Rp " + total.toLocaleString('id-ID');
+        }
+
+        // Simulasi Alur Flowchart Langkah ke-6 & ke-7 (Konfirmasi & Generate Kode)
+        function prosesBooking(e) {
+            e.preventDefault();
+            if (hargaPerJam === 0) {
+                alert("Silakan pilih studio terlebih dahulu!");
+                return;
+            }
+            
+            let successBox = document.getElementById('successBox');
+            successBox.style.display = "block";
+            successBox.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
